@@ -1,5 +1,12 @@
 # ── Compiled ──────────────────────────────────────────────
-target/
+#target/
+target/*.original
+target/classes/
+target/generated-sources/
+target/maven-archiver/
+target/maven-status/
+target/surefire-reports/
+target/test-classes/
 *.class
 *.jar
 *.war
