@@ -1,0 +1,156 @@
+/* ── ParkEase Custom Styles ─────────────────────────────── */
+
+/* Body */
+.pk-body {
+    background-color: #f8f7f4;
+    min-height: 100vh;
+}
+
+/* Navbar */
+.pk-navbar {
+    background-color: #1a1714 !important;
+    border-bottom: 3px solid #e85d26;
+    padding: 12px 0;
+}
+
+/* Auth */
+.pk-auth-bg {
+    background-color: #f8f7f4;
+    background-image: radial-gradient(ellipse at 20% 50%, rgba(232,93,38,0.06) 0%, transparent 50%);
+}
+
+.pk-auth-card {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 18px !important;
+}
+
+.pk-logo-icon {
+    width: 56px;
+    height: 56px;
+    background: #e85d26;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+}
+
+/* Stat Cards */
+.pk-stat-card {
+    border-radius: 12px !important;
+    border-top: 3px solid #e85d26 !important;
+    transition: transform 0.15s;
+}
+
+.pk-stat-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Table headers */
+.pk-th {
+    font-size: 10px !important;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600 !important;
+    color: #8a8278 !important;
+    padding: 10px 16px !important;
+}
+
+/* Quick Links */
+.pk-quick-link {
+    cursor: pointer;
+    border-radius: 12px !important;
+    transition: all 0.15s;
+    color: inherit;
+}
+
+.pk-quick-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1) !important;
+    border-color: #e85d26 !important;
+}
+
+/* Slot Cards */
+.pk-slot-card {
+    border-radius: 10px !important;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 2px solid transparent !important;
+}
+
+.pk-slot-available {
+    background-color: #dcfce7;
+    border-color: #86efac !important;
+}
+
+.pk-slot-available:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(22,163,74,0.2) !important;
+}
+
+/* Slot Info Box (booking page) */
+.pk-slot-info-box {
+    background: #fff3e8;
+    border: 1.5px solid rgba(232,93,38,0.2);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+/* Success Circle */
+.pk-success-circle {
+    width: 80px;
+    height: 80px;
+    background: #dcfce7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+}
+
+/* Cards general */
+.card {
+    border-radius: 12px !important;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+/* Buttons */
+.btn-warning {
+    background-color: #e85d26 !important;
+    border-color: #e85d26 !important;
+    color: #fff !important;
+}
+
+.btn-warning:hover {
+    background-color: #d14e1a !important;
+    border-color: #d14e1a !important;
+}
+
+.btn-outline-warning {
+    color: #e85d26 !important;
+    border-color: #e85d26 !important;
+}
+
+.btn-outline-warning:hover {
+    background-color: #e85d26 !important;
+    color: #fff !important;
+}
+
+/* Text warning override */
+.text-warning {
+    color: #e85d26 !important;
+}
+
+/* Badge */
+.badge {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #e8e4dc; border-radius: 3px; }

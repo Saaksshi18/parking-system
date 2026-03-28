@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Parking Slots — ParkEase</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body class="pk-body">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-4 py-4">
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1">Parking Slots 🅿️</h3>
+        <p class="text-muted small mb-0">Add, edit, and manage all parking slots</p>
+    </div>
+
+    <div th:if="${message}" class="alert alert-success alert-dismissible fade show">
+        <span th:text="${message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Add Slot Form -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h6 class="fw-bold mb-0">+ Add New Slot</h6>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/admin/slots/add}" method="post" th:object="${newSlot}">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Slot Number</label>
+                            <input type="text" th:field="*{slotNumber}" class="form-control"
+                                   placeholder="e.g. A-09" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Zone</label>
+                            <input type="text" th:field="*{zone}" class="form-control"
+                                   placeholder="e.g. Zone A"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Vehicle Type</label>
+                            <select th:field="*{vehicleType}" class="form-select" required>
+                                <option value="">Select type</option>
+                                <option value="FOUR_WHEELER">🚗 Four Wheeler</option>
+                                <option value="TWO_WHEELER">🛵 Two Wheeler</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Price Per Hour (₹)</label>
+                            <input type="number" th:field="*{pricePerHour}" class="form-control"
+                                   placeholder="40" step="0.01" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Status</label>
+                            <select th:field="*{status}" class="form-select">
+                                <option value="AVAILABLE">Available</option>
+                                <option value="RESERVED">Reserved</option>
+                            </select>
+                        </div>
+                        <div class="mb-4 form-check">
+                            <input type="checkbox" th:field="*{reservedForPermanentUser}"
+                                   class="form-check-input" id="reservedCheck"/>
+                            <label class="form-check-label small" for="reservedCheck">
+                                Reserved for permanent users
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100 fw-bold">
+                            + Save Slot
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slots Table -->
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold mb-0">All Slots</h6>
+                        <small class="text-muted" th:text="${#lists.size(slots)} + ' slots total'"></small>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="pk-th">Slot No.</th>
+                                <th class="pk-th">Zone</th>
+                                <th class="pk-th">Type</th>
+                                <th class="pk-th">Price/hr</th>
+                                <th class="pk-th">Status</th>
+                                <th class="pk-th">Reserved</th>
+                                <th class="pk-th">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="slot : ${slots}">
+                                <td class="fw-bold" th:text="${slot.slotNumber}">—</td>
+                                <td th:text="${slot.zone}">—</td>
+                                <td>
+                                    <span th:text="${slot.vehicleType == T(com.parking.parkingsystem.model.ParkingSlot.VehicleType).FOUR_WHEELER} ? '🚗 4W' : '🛵 2W'"></span>
+                                </td>
+                                <td th:text="'₹' + ${slot.pricePerHour}">—</td>
+                                <td>
+                                    <span th:class="${slot.status.name() == 'AVAILABLE'} ? 'badge bg-success' :
+                                                   (${slot.status.name() == 'OCCUPIED'} ? 'badge bg-danger' : 'badge bg-primary')"
+                                          th:text="${slot.status}"></span>
+                                </td>
+                                <td>
+                                    <span th:if="${slot.reservedForPermanentUser}" class="badge bg-info">Yes</span>
+                                    <span th:unless="${slot.reservedForPermanentUser}" class="text-muted small">No</span>
+                                </td>
+                                <td>
+                                    <a th:href="@{/admin/slots/edit/{id}(id=${slot.id})}"
+                                       class="btn btn-outline-warning btn-sm me-1">Edit</a>
+                                    <a th:href="@{/admin/slots/delete/{id}(id=${slot.id})}"
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('Delete this slot?')">Delete</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(slots)}">
+                                <td colspan="7" class="text-center text-muted py-4">No slots yet. Add your first slot!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

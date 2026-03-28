@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Booking Confirmed — ParkEase</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body class="pk-body">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <!-- Success Banner -->
+            <div class="text-center mb-4">
+                <div class="pk-success-circle mx-auto mb-3">✅</div>
+                <h3 class="fw-bold">Booking Confirmed!</h3>
+                <p class="text-muted">
+                    <code th:text="'#BK-' + ${booking.id}"></code> ·
+                    <span th:text="${booking.parkingSlot.slotNumber}"></span> ·
+                    Show the QR code at the entry gate
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <!-- QR Code -->
+                <div class="col-md-5">
+                    <div class="card border-0 shadow-sm text-center">
+                        <div class="card-header bg-dark text-white py-3">
+                            <h6 class="fw-bold mb-0">📱 Entry QR Code</h6>
+                        </div>
+                        <div class="card-body p-4">
+                            <div th:if="${booking.qrCode != null and !#strings.isEmpty(booking.qrCode)}">
+                                <img th:src="'data:image/png;base64,' + ${booking.qrCode}"
+                                     alt="Booking QR Code"
+                                     class="img-fluid rounded mb-3"
+                                     style="max-width:180px"/>
+                            </div>
+                            <div th:unless="${booking.qrCode != null and !#strings.isEmpty(booking.qrCode)}"
+                                 class="py-4 text-muted">
+                                <div style="font-size:48px">📱</div>
+                                <small>QR Code generating...</small>
+                            </div>
+                            <div class="small text-muted font-monospace"
+                                 th:text="'BK' + ${booking.id} + '-' + ${booking.parkingSlot.slotNumber}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Details -->
+                <div class="col-md-7">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-warning text-dark py-3">
+                            <h6 class="fw-bold mb-0">📋 Booking Details</h6>
+                        </div>
+                        <div class="card-body p-4">
+                            <table class="table table-borderless small mb-0">
+                                <tr>
+                                    <td class="text-muted">Booking ID</td>
+                                    <td class="fw-bold"><code th:text="'#BK-' + ${booking.id}"></code></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Slot</td>
+                                    <td class="fw-bold" th:text="${booking.parkingSlot.slotNumber}">—</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Zone</td>
+                                    <td th:text="${booking.parkingSlot.zone}">—</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Vehicle</td>
+                                    <td th:text="${booking.vehicleNumber}">—</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Start Time</td>
+                                    <td th:text="${#temporals.format(booking.startTime,'dd MMM yyyy HH:mm')}">—</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">End Time</td>
+                                    <td th:text="${#temporals.format(booking.endTime,'dd MMM yyyy HH:mm')}">—</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Base Cost</td>
+                                    <td th:text="'₹' + ${#numbers.formatDecimal(booking.baseCost,1,2)}">—</td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td>Total Paid</td>
+                                    <td class="text-warning fs-5"
+                                        th:text="'₹' + ${#numbers.formatDecimal(booking.totalAmount,1,2)}">—</td>
+                                </tr>
+                            </table>
+
+                            <div class="alert alert-warning mt-3 py-2 small">
+                                ⚠️ Please vacate by
+                                <strong th:text="${#temporals.format(booking.endTime,'HH:mm')}"></strong>.
+                                Overstay penalty: ₹20/hr.
+                            </div>
+
+                            <div class="d-flex gap-2 mt-3">
+                                <a th:href="@{/user/bookings}" class="btn btn-warning fw-bold flex-grow-1">
+                                    View My Bookings
+                                </a>
+                                <a th:href="@{/user/slots}" class="btn btn-outline-secondary">
+                                    Book Another
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+# ── Compiled ──────────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# ── Maven ─────────────────────────────────────────────────
+.mvn/
+mvnw
+mvnw.cmd
+!.mvn/wrapper/maven-wrapper.jar
+
+# ── IDE ───────────────────────────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.code-workspace
+.settings/
+.classpath
+.project
+.factorypath
+
+# ── OS ────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ──────────────────────────────────────────────────
+*.log
+logs/
+spring.log
+
+# ── Environment / Secrets (NEVER commit these) ────────────
+.env
+.env.local
+application-prod.properties
+application-secret.properties
+
+# ── Spring Boot ───────────────────────────────────────────
+HELP.md

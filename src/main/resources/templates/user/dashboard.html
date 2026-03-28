@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>My Dashboard — ParkEase</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body class="pk-body">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-4 py-4">
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1">Welcome, <span th:text="${user.fullName}">User</span> 👋</h3>
+        <p class="text-muted small mb-0">Find and book your parking spot in seconds</p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm text-center py-4 pk-quick-link"
+                 onclick="window.location='/user/slots'">
+                <div style="font-size:36px">🔍</div>
+                <h4 class="fw-bold text-success mt-2" th:text="${availableSlots}">0</h4>
+                <p class="text-muted small mb-0">Available Slots Now</p>
+                <a th:href="@{/user/slots}" class="btn btn-success btn-sm mt-3">Find Parking →</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm text-center py-4">
+                <div style="font-size:36px">🚗</div>
+                <h4 class="fw-bold text-primary mt-2" th:text="${#lists.size(myBookings)}">0</h4>
+                <p class="text-muted small mb-0">Recent Bookings</p>
+                <a th:href="@{/user/bookings}" class="btn btn-outline-primary btn-sm mt-3">View All</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm text-center py-4">
+                <div style="font-size:36px">👤</div>
+                <h4 class="fw-bold text-warning mt-2" th:text="${user.userType}">—</h4>
+                <p class="text-muted small mb-0">Account Type</p>
+                <span th:if="${user.userType.name() == 'PERMANENT'}" class="badge bg-primary mt-3">Priority Access</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3 d-flex justify-content-between">
+            <div>
+                <h6 class="fw-bold mb-0">My Recent Bookings</h6>
+                <small class="text-muted">Latest 3 bookings</small>
+            </div>
+            <a th:href="@{/user/bookings}" class="btn btn-outline-warning btn-sm">View All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="pk-th">ID</th>
+                        <th class="pk-th">Slot</th>
+                        <th class="pk-th">Date</th>
+                        <th class="pk-th">Duration</th>
+                        <th class="pk-th">Amount</th>
+                        <th class="pk-th">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="b : ${myBookings}">
+                        <td><code th:text="'#BK-' + ${b.id}"></code></td>
+                        <td th:text="${b.parkingSlot.slotNumber}">—</td>
+                        <td th:text="${#temporals.format(b.startTime,'dd MMM HH:mm')}">—</td>
+                        <td th:text="${#temporals.format(b.startTime,'HH:mm')} + ' → ' + ${#temporals.format(b.endTime,'HH:mm')}">—</td>
+                        <td th:text="'₹' + ${#numbers.formatDecimal(b.totalAmount,1,2)}">—</td>
+                        <td>
+                            <span th:class="${b.status.name() == 'ACTIVE'} ? 'badge bg-success' :
+                                           (${b.status.name() == 'CANCELLED'} ? 'badge bg-danger' : 'badge bg-secondary')"
+                                  th:text="${b.status}"></span>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(myBookings)}">
+                        <td colspan="6" class="text-center text-muted py-4">
+                            No bookings yet.
+                            <a th:href="@{/user/slots}">Book your first slot →</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

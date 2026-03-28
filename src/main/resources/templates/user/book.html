@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Book Slot — ParkEase</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body class="pk-body">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="mb-4">
+                <h3 class="fw-bold mb-1">Book a Slot 📅</h3>
+                <p class="text-muted small">Confirm your booking details below</p>
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="row g-4">
+
+                <!-- Booking Form -->
+                <div class="col-md-7">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+
+                            <!-- Slot Info -->
+                            <div class="pk-slot-info-box mb-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div style="font-size:40px"
+                                         th:text="${slot.vehicleType.name() == 'FOUR_WHEELER'} ? '🚗' : '🛵'"></div>
+                                    <div>
+                                        <h5 class="fw-bold mb-0" th:text="${slot.slotNumber}">—</h5>
+                                        <small class="text-muted" th:text="${slot.zone} + ' · ₹' + ${slot.pricePerHour} + '/hr'"></small>
+                                        <div><span class="badge bg-success">Available</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form th:action="@{/user/book/{id}(id=${slot.id})}" method="post" id="bookingForm">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold small">Vehicle Number</label>
+                                    <input type="text" name="vehicleNumber" class="form-control"
+                                           placeholder="MH 02 AB 1234" required/>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold small">Duration (hours)</label>
+                                    <select name="duration" class="form-select" id="durationSelect"
+                                            onchange="updateCost(this.value)">
+                                        <option value="1">1 Hour</option>
+                                        <option value="2" selected>2 Hours</option>
+                                        <option value="3">3 Hours</option>
+                                        <option value="4">4 Hours</option>
+                                        <option value="5">5 Hours</option>
+                                        <option value="6">6 Hours</option>
+                                        <option value="8">8 Hours</option>
+                                    </select>
+                                </div>
+                                <div class="d-flex gap-2 mt-4">
+                                    <button type="submit" class="btn btn-warning fw-bold flex-grow-1">
+                                        ✅ Confirm Booking
+                                    </button>
+                                    <a th:href="@{/user/slots}" class="btn btn-outline-secondary">← Back</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cost Summary -->
+                <div class="col-md-5">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-warning text-dark py-3">
+                            <h6 class="fw-bold mb-0">💰 Cost Summary</h6>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between mb-2 small">
+                                <span class="text-muted">Slot</span>
+                                <span class="fw-semibold" th:text="${slot.slotNumber}">—</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2 small">
+                                <span class="text-muted">Rate</span>
+                                <span class="fw-semibold" th:text="'₹' + ${slot.pricePerHour} + '/hr'">—</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2 small">
+                                <span class="text-muted">Duration</span>
+                                <span id="summaryDuration" class="fw-semibold">2 hrs</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2 small">
+                                <span class="text-muted">Base Cost</span>
+                                <span id="summaryBase" class="fw-semibold">—</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2 small">
+                                <span class="text-muted">Tax (5%)</span>
+                                <span id="summaryTax" class="fw-semibold">—</span>
+                            </div>
+                            <hr/>
+                            <div class="d-flex justify-content-between fw-bold">
+                                <span>Total</span>
+                                <span class="text-warning fs-5" id="summaryTotal">—</span>
+                            </div>
+
+                            <div class="alert alert-warning mt-3 py-2 small">
+                                ⚠️ Overstay penalty: <strong>₹20/hr</strong> after your booked time
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const pricePerHour = [[${slot.pricePerHour}]];
+
+    function updateCost(hours) {
+        const base = pricePerHour * hours;
+        const tax = base * 0.05;
+        const total = base + tax;
+        document.getElementById('summaryDuration').textContent = hours + ' hrs';
+        document.getElementById('summaryBase').textContent = '₹' + base.toFixed(2);
+        document.getElementById('summaryTax').textContent = '₹' + tax.toFixed(2);
+        document.getElementById('summaryTotal').textContent = '₹' + total.toFixed(2);
+    }
+
+    // Initialize on page load
+    updateCost(2);
+</script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

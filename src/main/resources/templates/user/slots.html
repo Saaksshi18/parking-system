@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Find Parking — ParkEase</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body class="pk-body">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-fluid px-4 py-4">
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1">Find Parking 🔍</h3>
+        <p class="text-muted small mb-0">Click on any available slot to book it</p>
+    </div>
+
+    <!-- Filter -->
+    <div class="d-flex gap-2 mb-4 flex-wrap">
+        <a th:href="@{/user/slots}"
+           th:class="${selectedType == null} ? 'btn btn-warning btn-sm fw-bold' : 'btn btn-outline-secondary btn-sm'">
+            All Slots
+        </a>
+        <a th:href="@{/user/slots(type='FOUR_WHEELER')}"
+           th:class="${selectedType == 'FOUR_WHEELER'} ? 'btn btn-warning btn-sm fw-bold' : 'btn btn-outline-secondary btn-sm'">
+            🚗 4-Wheeler
+        </a>
+        <a th:href="@{/user/slots(type='TWO_WHEELER')}"
+           th:class="${selectedType == 'TWO_WHEELER'} ? 'btn btn-warning btn-sm fw-bold' : 'btn btn-outline-secondary btn-sm'">
+            🛵 2-Wheeler
+        </a>
+    </div>
+
+    <!-- Legend -->
+    <div class="d-flex gap-3 mb-3 small text-muted">
+        <span>🟢 Available — Click to book</span>
+        <span>🔴 Occupied — Currently in use</span>
+        <span>🔵 Reserved — Priority slots</span>
+    </div>
+
+    <!-- Slots Grid -->
+    <div th:if="${#lists.isEmpty(slots)}" class="text-center py-5 text-muted">
+        <div style="font-size:48px">😔</div>
+        <h5 class="mt-3">No available slots right now</h5>
+        <p>Please check back later or try a different vehicle type.</p>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2" th:each="slot : ${slots}">
+            <a th:href="@{/user/book/{id}(id=${slot.id})}"
+               class="text-decoration-none">
+                <div class="card border-0 shadow-sm text-center py-3 pk-slot-card pk-slot-available">
+                    <div style="font-size:24px"
+                         th:text="${slot.vehicleType.name() == 'FOUR_WHEELER'} ? '🚗' : '🛵'"></div>
+                    <div class="fw-bold mt-1" th:text="${slot.slotNumber}">—</div>
+                    <small class="text-muted" th:text="${slot.zone}">—</small>
+                    <div class="mt-1">
+                        <span class="badge bg-success" th:text="'₹' + ${slot.pricePerHour} + '/hr'"></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

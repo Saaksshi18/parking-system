@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit Slot — ParkEase</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body class="pk-body">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h6 class="fw-bold mb-0">✏️ Edit Parking Slot</h6>
+                </div>
+                <div class="card-body p-4">
+                    <form th:action="@{/admin/slots/edit/{id}(id=${slot.id})}" method="post" th:object="${slot}">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Slot Number</label>
+                            <input type="text" th:field="*{slotNumber}" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Zone</label>
+                            <input type="text" th:field="*{zone}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Vehicle Type</label>
+                            <select th:field="*{vehicleType}" class="form-select">
+                                <option value="FOUR_WHEELER">🚗 Four Wheeler</option>
+                                <option value="TWO_WHEELER">🛵 Two Wheeler</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Price Per Hour (₹)</label>
+                            <input type="number" th:field="*{pricePerHour}" class="form-control" step="0.01"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Status</label>
+                            <select th:field="*{status}" class="form-select">
+                                <option value="AVAILABLE">Available</option>
+                                <option value="OCCUPIED">Occupied</option>
+                                <option value="RESERVED">Reserved</option>
+                            </select>
+                        </div>
+                        <div class="mb-4 form-check">
+                            <input type="checkbox" th:field="*{reservedForPermanentUser}"
+                                   class="form-check-input" id="reservedCheck"/>
+                            <label class="form-check-label small" for="reservedCheck">
+                                Reserved for permanent users
+                            </label>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning fw-bold flex-grow-1">Save Changes</button>
+                            <a th:href="@{/admin/slots}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
