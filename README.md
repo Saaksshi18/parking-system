@@ -18,7 +18,6 @@ The goal of this project was to go beyond CRUD and actually implement **real bus
 
 ## 📸 Screenshots
 
-> (Add these after you run your project)
 
 ### 🔐 Login Page
 
