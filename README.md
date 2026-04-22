@@ -1,145 +1,166 @@
-# 🅿️ ParkEase — Online Parking Booking System
+#  ParkEase — Online Parking Booking System
 
-A full-stack, production-like **Online Parking Booking System** built with Java Spring Boot, MySQL, Thymeleaf, and Bootstrap 5. Designed as a resume-worthy project covering authentication, CRUD, business logic, QR codes, and admin analytics.
+This is a full-stack parking management system I built using Spring Boot to understand how real-world booking systems work (like slot allocation, preventing conflicts, etc.).
+
+The goal of this project was to go beyond CRUD and actually implement **real business logic** like booking validation, auto slot release, and role-based access.
 
 ---
 
 ## 🚀 Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Backend | Java 21 + Spring Boot 3.5 |
-| Database | MySQL 8.4 |
-| Frontend | Thymeleaf + Bootstrap 5 |
-| Security | Spring Security + BCrypt |
-| QR Code | ZXing (Google) |
-| Build Tool | Maven |
+* **Backend:** Java 21, Spring Boot
+* **Database:** MySQL
+* **Frontend:** Thymeleaf, Bootstrap
+* **Security:** Spring Security + BCrypt
+* **Build Tool:** Maven
 
 ---
 
-## ✅ Features
+## 📸 Screenshots
 
-### Admin Panel
-- 🔐 Secure admin login
-- 🅿️ Add / Edit / Delete parking slots
-- 🚗 Define slot type (2-wheeler / 4-wheeler)
-- 🔵 Mark slots as reserved (permanent users) or unreserved
-- 💰 Set price per hour per slot
-- 📋 View all bookings across all users
-- 👥 Manage user accounts (activate / suspend)
-- 📊 Revenue analytics (today + all-time)
+> (Add these after you run your project)
 
-### User Panel
-- 📝 Register and login
-- 🔍 View available parking slots in real time
-- 🎛️ Filter by vehicle type (2W / 4W)
-- 📅 Book a slot with start time and duration
-- 💰 Live cost preview before confirming
-- 📱 QR code generated on booking confirmation
-- ❌ Cancel active bookings
-- 📋 View full booking history
+### 🔐 Login Page
 
-### Core System Logic
-- 🚫 Double-booking prevention (conflict detection)
-- ⏰ Slots auto-marked as occupied during booking
-- 🔄 Auto-release slots after booking ends (scheduled every 5 mins)
-- ⚠️ Overstay penalty calculation (₹20/hr extra)
-- 🔑 Role-based access (ADMIN vs USER)
-- 🥇 Reserved slots for permanent/priority users
+![Login](screenshots/login.png)
+
+### 🧑‍💼 Admin Dashboard
+
+![Admin](screenshots/admin-dashboard.png)
+
+### 🚗 User Slot View
+
+![Slots](screenshots/user-slots.png)
+
+### 📅 Booking Confirmation + QR
+
+![QR](screenshots/booking-qr.png)
 
 ---
 
-## 🛠️ Setup & Installation
+## ✨ Features
 
-### Prerequisites
-- Java 21+
-- Maven 3.9+
-- MySQL 8.4+
+### 👤 User Side
 
-### Step 1 — Clone the Repository
+* Register & login
+* View available parking slots
+* Filter by vehicle type (2W / 4W)
+* Book a slot with time + duration
+* Live price calculation before booking
+* QR code generated after booking
+* Cancel bookings
+* View booking history
+
+---
+
+### 🧑‍💼 Admin Side
+
+* Admin login
+* Add / edit / delete parking slots
+* Mark slots as reserved/unreserved
+* Set pricing per slot
+* View all bookings
+* Manage users (enable/disable)
+* View revenue stats
+
+---
+
+### ⚙️ Core Logic Implemented
+
+* Prevents **double booking** using time overlap checks
+* Slots automatically marked as occupied during booking
+* Scheduler releases slots after booking ends
+* Overstay penalty calculation
+* Role-based access (ADMIN / USER)
+
+---
+
+## 🛠️ How to Run Locally
+
+### 1. Clone the repo
+
 ```bash
 git clone https://github.com/YOUR_USERNAME/parking-system.git
 cd parking-system
 ```
 
-### Step 2 — Create MySQL Database
+### 2. Create database
+
 ```sql
 CREATE DATABASE parking_db;
-CREATE USER 'parking_user'@'localhost' IDENTIFIED BY 'parking123';
-GRANT ALL PRIVILEGES ON parking_db.* TO 'parking_user'@'localhost';
-FLUSH PRIVILEGES;
 ```
 
-### Step 3 — Configure application.properties
-```bash
-cp src/main/resources/application-example.properties src/main/resources/application.properties
-```
-Then edit `application.properties` with your MySQL credentials.
+### 3. Configure DB credentials
 
-### Step 4 — Run the Application
+Edit:
+
+```
+src/main/resources/application.properties
+```
+
+---
+
+### 4. Run the app
+
 ```bash
 mvn spring-boot:run
 ```
 
-### Step 5 — Access
-- URL: `http://localhost:8080`
-- **Admin:** `admin@park.com` / `admin123`
-- **Register as User:** `http://localhost:8080/auth/register`
-
-> Tables are auto-created by Hibernate. 24 sample slots are seeded on first run.
-
 ---
 
-## 📁 Project Structure
+### 5. Open in browser
 
 ```
-src/main/
-├── java/com/parking/parkingsystem/
-│   ├── config/
-│   │   ├── SecurityConfig.java        # Spring Security configuration
-│   │   └── DataInitializer.java       # Seeds admin user + sample slots
-│   ├── controller/
-│   │   ├── AuthController.java        # Login & registration
-│   │   ├── DashboardController.java   # Role-based redirect
-│   │   ├── AdminController.java       # All admin routes
-│   │   └── UserController.java        # All user routes
-│   ├── model/
-│   │   ├── ParkingSlot.java
-│   │   ├── User.java
-│   │   └── Booking.java
-│   ├── repository/
-│   │   ├── ParkingSlotRepository.java
-│   │   ├── UserRepository.java
-│   │   └── BookingRepository.java
-│   └── service/
-│       ├── ParkingSlotService.java
-│       ├── UserService.java
-│       ├── BookingService.java        # Core logic + QR + scheduler
-│       └── CustomUserDetailsService.java
-└── resources/
-    ├── application-example.properties # Template — copy to application.properties
-    ├── templates/
-    │   ├── auth/      login.html, register.html
-    │   ├── admin/     dashboard, slots, bookings, users, revenue
-    │   ├── user/      dashboard, slots, book, confirmation, bookings
-    │   └── fragments/ navbar, head
-    └── static/css/style.css
+http://localhost:8080
 ```
 
 ---
 
-## 🎯 Interview Talking Points
+### Default Admin Login
 
-- **Architecture:** MVC pattern — Controller → Service → Repository → Database
-- **Security:** BCrypt password hashing, Spring Security filter chain, role-based access control
-- **ORM:** Hibernate auto-creates tables from Java entities via JPA annotations (`@Entity`, `@Table`)
-- **Business Logic:** Double-booking conflict detection using JPQL range queries
-- **Scheduler:** `@Scheduled` auto-releases expired slots every 5 minutes
-- **QR Generation:** ZXing encodes booking data into Base64 PNG served inline via Thymeleaf
-- **No boilerplate:** Lombok `@Data` auto-generates getters/setters/toString
+```
+admin@park.com
+admin123
+```
+
+---
+
+## 📁 Project Structure (simplified)
+
+```
+controller → handles requests
+service → business logic
+repository → database interaction
+model → entities
+```
+
+---
+
+## 💡 What I Learned
+
+* How Spring Boot actually connects everything (Controller → Service → DB)
+* Handling real-world problems like booking conflicts
+* Using schedulers for background tasks
+* Implementing authentication and role-based access
+* Structuring a full-stack project properly
+
+---
+
+## ⚠️ Future Improvements
+
+* Payment integration
+* Email notifications
+* Better UI (React maybe)
+* Deployment with Docker
+
+---
+
+## 📌 Note
+
+This project is mainly built for learning purposes and to understand how backend systems work in real scenarios.
 
 ---
 
 ## 📄 License
 
-MIT — free to use for learning and portfolio purposes.
+MIT
