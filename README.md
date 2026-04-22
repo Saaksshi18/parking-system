@@ -26,15 +26,15 @@ The goal of this project was to go beyond CRUD and actually implement **real bus
 
 ### 🧑‍💼 Admin Dashboard
 
-![Admin](screenshots/admin-dashboard.png)
+![Admin](screenshots/dashboard.png)
 
 ### 🚗 User Slot View
 
-![Slots](screenshots/user-slots.png)
+![Slots](screenshots/slot.png)
 
 ### 📅 Booking Confirmation + QR
 
-![QR](screenshots/booking-qr.png)
+![QR](screenshots/qr.png)
 
 ---
 
